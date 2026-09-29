@@ -155,6 +155,20 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 .code strong { display: block; margin-top: 4px; font-weight: 800; font-size: 34px; letter-spacing: 2px; }
 .code .btn { margin-top: 12px; padding: 10px 26px; font-size: 15.5px; }
 
+/* -------------------------------------------------------------- forms -- */
+
+.solo form { margin: 0; }
+.field { display: block; margin-top: 18px; text-align: left; }
+.field span { display: block; margin-bottom: 6px; font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.field input {
+	width: 100%; padding: 14px 16px;
+	background: #F7F4EF; border: 2px solid var(--hairline); border-radius: 14px;
+	font: inherit; font-weight: 700; font-size: 18px; color: var(--ink);
+}
+.field input:focus { outline: none; border-color: var(--sky); }
+.solo .problem { margin-top: 14px; font-weight: 700; font-size: 15px; color: #C9383A; }
+.btn:disabled { opacity: .6; cursor: default; }
+
 /* ------------------------------------------------------------- footer -- */
 
 .foot { padding: 34px 0 28px; text-align: center; font-weight: 700; font-size: 13px; color: var(--ink-soft); }
@@ -167,4 +181,9 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-o
 	.wordmark .tiles { gap: 7px; }
 	.features { flex-direction: column; }
 	.content { padding: 28px 22px; }
+	/* A solo card must fit a phone: its row of tiles sets its narrowest width. */
+	.solo { padding: 16px; }
+	.solo .card { padding: 32px 22px; }
+	.solo .tiles { gap: 6px; }
+	.solo .tile.logo { width: 44px; height: 44px; border-radius: 11px; font-size: 30px; }
 }

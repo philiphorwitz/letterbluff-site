@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose a new password — Letter Bluff</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<script>
+// The link from the email arrives with a short-lived key after the "#".
+// It is read once, kept in memory only, and taken out of the address bar
+// before anything else on the page runs.
+(function () {
+	var arrived = new URLSearchParams(location.hash.slice(1) || location.search.slice(1));
+	window.resetKey = arrived.get("type") === "recovery" ? (arrived.get("access_token") || "") : "";
+	window.linkFailed = arrived.has("error") || arrived.has("error_code");
+	history.replaceState(null, "", location.pathname);
+	// A second link opened in this same tab changes only the "#": start over.
+	window.addEventListener("hashchange", function () { location.reload(); });
+})();
+</script>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<main class="solo">
+	<div class="card">
+		<div class="tiles" role="img" aria-label="Letter Bluff">
+			<span class="tile logo" aria-hidden="true">B</span>
+			<span class="tile logo" aria-hidden="true">L</span>
+			<span class="tile logo" aria-hidden="true">U</span>
+			<span class="tile logo" aria-hidden="true">F</span>
+			<span class="tile logo coral rock" aria-hidden="true">F</span>
+		</div>
+
+		<form id="form" hidden novalidate>
+			<h1>Choose a new password</h1>
+			<p>At least 8 characters. You'll use it to sign in to Letter Bluff.</p>
+			<label class="field">
+				<span>New password</span>
+				<input id="password" type="password" autocomplete="new-password" minlength="8" required>
+			</label>
+			<label class="field">
+				<span>Type it again</span>
+				<input id="again" type="password" autocomplete="new-password" minlength="8" required>
+			</label>
+			<p id="problem" class="problem" role="alert" hidden></p>
+			<div class="stores">
+				<button class="btn" id="save" type="submit">Save password</button>
+			</div>
+		</form>
+
+		<div id="done" hidden>
+			<h1>Password changed</h1>
+			<p>Go back to Letter Bluff and sign in with your email and your new password.</p>
+		</div>
+
+		<div id="failed" hidden>
+			<h1>That link didn't work</h1>
+			<p>Reset links expire after a while and work only once. In the game, open the email sign-in and tap <strong>forgot password?</strong> to get a fresh one.</p>
+		</div>
+
+		<p class="note-line">Trouble? <a href="/support">Contact support</a></p>
+	</div>
+</main>
+<script>
+(function () {
+	// The game's backend. The key is the public one the game itself ships with.
+	var BACKEND = "https://mlbbwtlwmawxunlhfcly.supabase.co";
+	var PUBLIC_KEY = "sb_publishable_Apzyy1UI7A_qWkeZv7n1nQ_G84Wq4Oz";
+	var MIN_LENGTH = 8;
+
+	var form = document.getElementById("form");
+	var problem = document.getElementById("problem");
+	var save = document.getElementById("save");
+
+	function show(id) {
+		["form", "done", "failed"].forEach(function (each) {
+			document.getElementById(each).hidden = each !== id;
+		});
+	}
+
+	function say(text) {
+		problem.textContent = text;
+		problem.hidden = text === "";
+	}
+
+	if (!window.resetKey || window.linkFailed) {
+		show("failed");
+		return;
+	}
+	show("form");
+	document.getElementById("password").focus();
+
+	form.addEventListener("submit", function (event) {
+		event.preventDefault();
+		var password = document.getElementById("password").value;
+		if (password.length < MIN_LENGTH) {
+			say("Use at least " + MIN_LENGTH + " characters.");
+			return;
+		}
+		if (password !== document.getElementById("again").value) {
+			say("Those two don't match.");
+			return;
+		}
+		say("");
+		save.disabled = true;
+		save.textContent = "One moment…";
+		fetch(BACKEND + "/auth/v1/user", {
+			method: "PUT",
+			headers: {
+				"apikey": PUBLIC_KEY,
+				"Authorization": "Bearer " + window.resetKey,
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ password: password })
+		}).then(function (response) {
+			return response.json().catch(function () { return {}; }).then(function (body) {
+				return { ok: response.ok, status: response.status, code: body.error_code || "" };
+			});
+		}).then(function (result) {
+			if (result.ok) {
+				window.resetKey = "";
+				form.reset();
+				show("done");
+				return;
+			}
+			save.disabled = false;
+			save.textContent = "Save password";
+			if (result.code === "weak_password") {
+				say("That password is too easy to guess. Try a longer one.");
+			} else if (result.code === "same_password") {
+				say("That's your current password. Choose a different one.");
+			} else if (result.status === 401 || result.status === 403) {
+				show("failed");
+			} else {
+				say("That didn't work. Try again in a moment.");
+			}
+		}).catch(function () {
+			save.disabled = false;
+			save.textContent = "Save password";
+			say("You seem to be offline. Check your connection and try again.");
+		});
+	});
+})();
+</script>
+</body>
+</html>

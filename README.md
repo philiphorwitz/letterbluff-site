@@ -17,6 +17,8 @@ Everything under `public/` is the site. Nothing outside it is served.
 | `/privacy` | `public/privacy.html` | Store listing "Privacy policy" |
 | `/delete-account/` | `public/delete-account/index.html` | Play Console ▸ Data safety ▸ account deletion URL |
 | `/i/?c=BLF-XXXX` | `public/i/index.html` | Invite landing (shows the friend's code) |
+| `/confirmed/` | `public/confirmed/index.html` | Where the account confirmation email's link lands |
+| `/reset-password/` | `public/reset-password/index.html` | Where the password reset email's link lands; sets the new password |
 | `/app-ads.txt` | `public/app-ads.txt` | AdMob verifies it against the listing's website |
 | any miss | `public/404.html` | — |
 
@@ -71,6 +73,17 @@ work that was still open when the site was written (2026-09-29):
   (as an `<a class="btn">`, not the ghost `<span>`).
 - **Social preview image** — none yet (`og:image`); add one from the
   store assets.
+
+## Account email links
+
+The game's backend (Supabase) sends the confirmation and reset
+emails; their links come back to the two pages above. Both read the
+outcome from the address, take it out of the address bar at once,
+and keep it in memory only. The reset page talks to the backend
+directly with the game's public key. For the links to land here,
+the Supabase dashboard needs the site URL set to
+`https://letterbluff.app` and `https://letterbluff.app/**` on its
+redirect allow list.
 
 ## Editing
 

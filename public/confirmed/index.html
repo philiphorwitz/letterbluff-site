@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email confirmed — Letter Bluff</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<script>
+// The link from the email arrives with its outcome after the "#". It is
+// read once and taken out of the address bar before anything else runs.
+(function () {
+	var outcome = new URLSearchParams(location.hash.slice(1) || location.search.slice(1));
+	window.linkFailed = outcome.has("error") || outcome.has("error_code");
+	history.replaceState(null, "", location.pathname);
+	// A second link opened in this same tab changes only the "#": start over.
+	window.addEventListener("hashchange", function () { location.reload(); });
+})();
+</script>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<main class="solo">
+	<div class="card">
+		<div class="tiles" role="img" aria-label="Letter Bluff">
+			<span class="tile logo" aria-hidden="true">B</span>
+			<span class="tile logo" aria-hidden="true">L</span>
+			<span class="tile logo" aria-hidden="true">U</span>
+			<span class="tile logo" aria-hidden="true">F</span>
+			<span class="tile logo coral rock" aria-hidden="true">F</span>
+		</div>
+		<div id="confirmed">
+			<h1>Email confirmed</h1>
+			<p>Your account is ready. Go back to Letter Bluff and sign in with your email and password — your progress will be waiting.</p>
+		</div>
+		<div id="failed" hidden>
+			<h1>That link didn't work</h1>
+			<p>It may have expired, or been used already. If your email is already confirmed you can simply sign in. Otherwise, create the account again in the game and we'll send a fresh link.</p>
+		</div>
+		<p class="note-line">Trouble? <a href="/support">Contact support</a></p>
+	</div>
+</main>
+<script>
+if (window.linkFailed) {
+	document.getElementById("confirmed").hidden = true;
+	document.getElementById("failed").hidden = false;
+	document.title = "That link didn't work — Letter Bluff";
+}
+</script>
+</body>
+</html>
