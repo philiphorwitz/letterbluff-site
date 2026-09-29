@@ -65,10 +65,10 @@ work that was still open when the site was written (2026-09-29):
 - **Play Console ▸ Data safety** must agree with the policy: device
   or other IDs (advertising, by Google), app activity and purchase
   history (ours), email only if signed in.
-- **Google Play button** points at the listing, which 404s until the
-  app is published.
-- **App Store** reads "coming soon" on the home and invite pages;
-  swap in the real link with the iOS release.
+- **Store buttons** both read "coming soon" on the home and invite
+  pages. Swap in the real links as each listing goes live — Play:
+  `https://play.google.com/store/apps/details?id=app.letterbluff.game`
+  (as an `<a class="btn">`, not the ghost `<span>`).
 - **Social preview image** — none yet (`og:image`); add one from the
   store assets.
 
