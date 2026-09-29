@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're invited — Letter Bluff</title>
+<meta name="description" content="A friend invited you to Letter Bluff — the word game where one letter is always bluffing. Join with their code and you both earn bonus coins.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<main class="solo">
+	<div class="card">
+		<div class="tiles" role="img" aria-label="Letter Bluff">
+			<span class="tile logo" aria-hidden="true">B</span>
+			<span class="tile logo" aria-hidden="true">L</span>
+			<span class="tile logo" aria-hidden="true">U</span>
+			<span class="tile logo" aria-hidden="true">F</span>
+			<span class="tile logo coral rock" aria-hidden="true">F</span>
+		</div>
+		<h1>A friend invited you</h1>
+		<p>Letter Bluff is a word game with a liar in it: every puzzle hides one letter that doesn't belong. Join with your friend's code and you <strong>both earn bonus coins</strong> when you finish chapter 1.</p>
+		<div class="code" id="codebox" hidden>
+			<small>YOUR FRIEND'S CODE</small>
+			<strong id="code"></strong>
+			<button class="btn" id="copy" type="button">Copy code</button>
+		</div>
+		<div class="stores">
+			<a class="btn" href="https://play.google.com/store/apps/details?id=app.letterbluff.game">Google Play</a>
+			<span class="btn ghost">App Store — coming soon</span>
+		</div>
+		<p class="note-line">After installing: finish the training, then open your profile → Invite friends → redeem the code.</p>
+	</div>
+</main>
+<script>
+// Shows the code from ?c=BLF-XXXX. Anything that isn't a well-formed
+// code is ignored, so the page never echoes arbitrary input.
+(function () {
+	var code = (new URLSearchParams(location.search).get("c") || "")
+			.toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 8);
+	if (!/^BLF-[A-Z0-9]{4}$/.test(code)) {
+		return;
+	}
+	document.getElementById("code").textContent = code;
+	document.getElementById("codebox").hidden = false;
+	var button = document.getElementById("copy");
+	button.addEventListener("click", function () {
+		navigator.clipboard.writeText(code).then(function () {
+			button.textContent = "Copied!";
+		});
+	});
+})();
+</script>
+</body>
+</html>

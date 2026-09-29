@@ -1,0 +1,170 @@
+/* Letter Bluff — site styles. The game's "Notebook" look: warm paper,
+   warm ink, hairline white cards, no shadows. Colour is only ever an
+   EVENT (coral = the bluff, green = a catch, sky = active, gold = coins). */
+
+@font-face {
+	font-family: 'Urbanist';
+	src: url('/assets/fonts/Urbanist.ttf') format('truetype');
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+:root {
+	--paper: #F2EFE9;
+	--ink: #4A463F;
+	--ink-soft: #6F6A61;   /* body copy: the game's soft tone, darkened to read at length */
+	--soft: #A29B8F;
+	--hairline: #E5E0D6;
+	--rule: #D8D2C6;
+	--card: #FFFFFF;
+	--green: #57D08C;
+	--coral: #FF5F61;
+	--sky: #72C8FA;
+	--gold: #F7C64B;
+	--gold-deep: #E8AD26;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: 'Urbanist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	font-weight: 500;
+}
+
+a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--ink); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 6px; }
+
+.page { max-width: 920px; margin: 0 auto; padding: 24px 22px 0; }
+
+/* ------------------------------------------------------------ top bar -- */
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; white-space: nowrap; }
+.navrow { display: flex; gap: 22px; flex-wrap: wrap; font-weight: 800; font-size: 14.5px; }
+.navrow a { text-decoration: none; color: var(--ink-soft); }
+.navrow a:hover, .navrow a[aria-current="page"] { color: var(--ink); }
+
+/* --------------------------------------------------- tiles and blanks -- */
+
+.tiles { display: flex; gap: 8px; justify-content: center; align-items: center; }
+.tile {
+	width: 48px; height: 48px; flex: none;
+	display: flex; align-items: center; justify-content: center;
+	background: var(--card); border: 1.5px solid var(--hairline); border-radius: 12px;
+	font-weight: 700; font-size: 30px; line-height: 1; color: var(--ink);
+}
+.tile.coral { background: var(--coral); border-color: var(--coral); color: #fff; }
+.tile.logo { width: 64px; height: 64px; border-radius: 16px; font-size: 44px; }
+.tile.mini { width: 34px; height: 34px; border-radius: 9px; font-size: 21px; }
+.tile.caught { transform: rotate(-6deg); }
+
+.blanks { display: flex; gap: 8px; justify-content: center; }
+.blank {
+	width: 44px; height: 52px; flex: none;
+	display: flex; align-items: flex-end; justify-content: center;
+	padding-bottom: 3px; border-bottom: 3.5px solid var(--ink);
+	font-weight: 700; font-size: 30px; line-height: 1;
+}
+
+/* The bluffing F rocks when motion is allowed; rests tilted when not. */
+.rock { transform: rotate(13deg); transform-origin: 55% 75%; }
+@media (prefers-reduced-motion: no-preference) {
+	.rock { animation: rock 2.4s ease-in-out infinite; }
+	@keyframes rock { 0%, 100% { transform: rotate(14deg); } 50% { transform: rotate(-11deg); } }
+}
+
+/* --------------------------------------------------------------- hero -- */
+
+.hero { text-align: center; padding: 76px 0 52px; }
+.wordmark { margin: 0; font-weight: 800; font-size: 60px; line-height: 1.05; }
+.wordmark .tiles { margin-top: 14px; gap: 10px; }
+.tagline { margin: 22px 0 0; font-weight: 800; font-size: 21px; color: var(--ink-soft); }
+.lede { margin: 12px auto 0; max-width: 34em; font-size: 17.5px; line-height: 1.6; color: var(--ink-soft); }
+.stores { margin-top: 34px; display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: wrap; }
+
+.btn {
+	display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+	background: var(--ink); color: var(--paper);
+	border: 2px solid var(--ink); border-radius: 999px;
+	padding: 13px 30px; font: inherit; font-weight: 700; font-size: 17px;
+	text-decoration: none; cursor: pointer;
+}
+.btn:hover { background: #3A372F; border-color: #3A372F; }
+.btn.ghost { background: transparent; color: var(--ink-soft); border-color: var(--rule); cursor: default; }
+
+/* -------------------------------------------------------------- cards -- */
+
+.card { background: var(--card); border: 1.5px solid var(--hairline); border-radius: 22px; }
+.eyebrow { font-weight: 800; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+
+.exhibit { max-width: 440px; margin: 0 auto 26px; padding: 26px 24px 24px; text-align: center; }
+.exhibit .tiles { margin-top: 18px; }
+.exhibit .blanks { margin-top: 20px; }
+.exhibit .caption { margin: 18px 0 0; font-weight: 700; font-size: 15.5px; color: var(--ink-soft); }
+
+.features { display: flex; gap: 18px; padding-bottom: 8px; }
+.feature { flex: 1; padding: 24px 26px; }
+.feature h2 { margin: 10px 0 0; font-weight: 800; font-size: 19px; }
+.feature p { margin: 6px 0 0; font-size: 15.5px; line-height: 1.6; color: var(--ink-soft); }
+
+/* ------------------------------------------------------ content pages -- */
+
+.content { margin-top: 34px; padding: 40px 46px 36px; }
+.content h1 { margin: 10px 0 0; font-weight: 800; font-size: 33px; line-height: 1.15; }
+.content h2 { margin: 30px 0 8px; font-weight: 800; font-size: 20px; }
+.content p, .content li { font-size: 16px; line-height: 1.65; color: var(--ink-soft); }
+.content p { margin: 0 0 12px; }
+.content ol { margin: 8px 0 12px; padding-left: 22px; }
+.content strong { color: var(--ink); font-weight: 700; }
+.content .dated { color: var(--ink-soft); font-style: italic; }
+.content .note { margin: 18px 0; padding: 16px 20px; background: var(--paper); border-radius: 16px; }
+.content .note p:last-child { margin-bottom: 0; }
+.content .closing { margin-top: 26px; padding-top: 20px; border-top: 1.5px solid var(--hairline); font-weight: 700; font-size: 14.5px; }
+
+.row { display: flex; gap: 14px; align-items: flex-start; margin: 14px 0; }
+.row b { display: block; font-weight: 800; font-size: 16px; color: var(--ink); }
+.row p { margin: 2px 0 0; font-size: 15px; }
+.dot {
+	flex: none; width: 38px; height: 38px; margin-top: 1px;
+	display: flex; align-items: center; justify-content: center;
+	background: var(--card); border: 1.5px solid var(--hairline); border-radius: 50%;
+}
+.dot img { width: 19px; height: 19px; }
+.dot.coral { background: var(--coral); border-color: var(--coral); color: #fff; font-weight: 800; font-size: 19px; }
+.row .tile.mini { margin-top: 3px; margin-left: 2px; margin-right: 2px; }
+
+/* --------------------------------------------- solo cards (invite, 404) -- */
+
+.solo { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.solo .card { width: 100%; max-width: 480px; padding: 44px 36px; text-align: center; }
+.solo h1 { margin: 22px 0 8px; font-weight: 800; font-size: 27px; }
+.solo p { margin: 0; font-size: 16.5px; line-height: 1.6; color: var(--ink-soft); }
+.solo strong { color: var(--ink); }
+.solo .tile.logo { width: 52px; height: 52px; border-radius: 13px; font-size: 36px; }
+.solo .note-line { margin-top: 22px; font-size: 14px; }
+
+.code { margin: 26px auto 0; max-width: 320px; padding: 18px 26px 20px; background: var(--paper); border-radius: 18px; }
+.code small { display: block; font-weight: 800; font-size: 12px; letter-spacing: .14em; color: var(--ink-soft); }
+.code strong { display: block; margin-top: 4px; font-weight: 800; font-size: 34px; letter-spacing: 2px; }
+.code .btn { margin-top: 12px; padding: 10px 26px; font-size: 15.5px; }
+
+/* ------------------------------------------------------------- footer -- */
+
+.foot { padding: 34px 0 28px; text-align: center; font-weight: 700; font-size: 13px; color: var(--ink-soft); }
+.foot a { color: var(--ink-soft); }
+
+@media (max-width: 760px) {
+	.hero { padding: 52px 0 40px; }
+	.wordmark { font-size: 46px; }
+	.tile.logo { width: 52px; height: 52px; border-radius: 13px; font-size: 36px; }
+	.wordmark .tiles { gap: 7px; }
+	.features { flex-direction: column; }
+	.content { padding: 28px 22px; }
+}

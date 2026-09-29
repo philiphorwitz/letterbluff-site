@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "letterbluff-site",
+  "compatibility_date": "2026-09-29",
+  "observability": {
+    "enabled": true
+  },
+  // Only public/ is served — the README, this file and the preview
+  // script stay out of reach. A miss gets public/404.html.
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  }
+}
